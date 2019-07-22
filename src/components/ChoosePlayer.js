@@ -9,8 +9,6 @@ import {
 } from "../actions";
 import steps from "../data/steps";
 import heroes from "../data/heroes.json";
-console.log(heroes.length);
-const fn = () => {};
 
 const getStyle = index => {
   const idxFromCenter = Math.abs(index - 1);
@@ -34,6 +32,7 @@ const ChoosePlayer = ({ mode, step, changeStep, choosePlayer, activeIndex, playe
 
   return (
     <div className="ChoosePlayer">
+      <h2 className="ChoosePlayer__title">Choose player {playerIndex + 1}</h2>
       <div className="ChoosePlayer__inner">
         {choices.map(({ id, name, images }, index) => (
           <div key={id} className="ChoosePlayer__character">

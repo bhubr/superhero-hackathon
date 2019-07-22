@@ -2,9 +2,10 @@ import {
   CHOOSE_PLAYER,
   PLAYER_CHOICE_SET_INDEX
 } from '../actions';
+import heroes from '../data/heroes.json';
 
 const initialState = {
-  activeIndex: 10,
+  activeIndex: Math.floor(heroes.length * Math.random()),
   characterId: 0,
   players: [
     null,
@@ -21,10 +22,12 @@ const stepReducer = (state = initialState, action) => {
       };
     case CHOOSE_PLAYER: {
       const { playerIdx, characterId } = action;
+      const { activeIndex } = state;
+      const newActiveIndex = activeIndex < heroes.length - 1 ? activeIndex + 1 : 0; 
       const players = [...state.players];
       players.splice(playerIdx, 1, characterId);
       return {
-        ...state,
+        activeIndex: newActiveIndex,
         characterId,
         players
       };

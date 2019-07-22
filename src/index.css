@@ -66,10 +66,24 @@ code {
   text-align: center;
 }
 
+.ChoosePlayer__title {
+  text-align: center;
+  color: #c158dc;
+  font-size: 200%;
+}
+
 .ChoosePlayer__btn {
   display: block;
   width: 25%;
   margin: 40px auto 0 auto;
   font-size: 180%;
   text-align: center;
+}
+
+.Arena {
+  display: flex;
+}
+
+.Arena__Player {
+  transition: all 0.05s;
 }
