@@ -81,11 +81,14 @@ class Arena extends Component {
     };
     this.player1Ref = createRef();
     this.player2Ref = createRef();
+    this.chargeInterval = null;
+    this.missileInterval = null;
+    this.showStrike = this.showStrike.bind(this);
+    this.hideStrike = this.hideStrike.bind(this);
     this.onKeyPressStart = this.onKeyPressStart.bind(this);
     this.onKeyPressStop = this.onKeyPressStop.bind(this);
     this.chargeUp = this.chargeUp.bind(this);
-    this.chargeInterval = null;
-    this.missileInterval = null;
+    this.switchPlayer = this.switchPlayer.bind(this);
   }
 
   componentDidMount() {
@@ -98,6 +101,22 @@ class Arena extends Component {
   componentWillUnmount() {
     document.removeEventListener("mousedown", this.onKeyPressStart);
     document.removeEventListener("mouseup", this.onKeyPressStop);
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { strike } = this.state;
+    if (strike && strike !== prevState.strike) {
+      this.showStrike();
+      setTimeout(this.hideStrike, 1000);
+    }
+  }
+
+  showStrike() {
+    this.setState({ showStrike: true });
+  }
+
+  hideStrike() {
+    this.setState({ showStrike: false });
   }
 
   onKeyPressStart(e) {
@@ -133,12 +152,29 @@ class Arena extends Component {
   startTrajectory() {
     this.missileInterval = setInterval(
       () =>
-        this.setState(({ speedX, speedY, posX, posY }) => {
+        this.setState(({ speedX, speedY, posX, posY, playerIdx }) => {
+          const otherPlayerRef =
+            playerIdx === 0 ? this.player2Ref : this.player1Ref;
+          const opRect = otherPlayerRef.current.getBoundingClientRect();
           const newSpeedY = speedY - SPEED_DECR_Y;
           const newSpeedX = speedX - SPEED_DECR_X;
           const newPosX = posX + speedX;
           const newPosY = posY - speedY;
           let missileVisible = true;
+          let strike = false;
+          // console.log("CHECK COORDS");
+          // console.log(newPosX, opRect.left);
+          // console.log(newPosX, opRect.right);
+          // console.log(newPosY, opRect.top);
+          // console.log(newPosY, opRect.bottom);
+          if (
+            newPosX >= opRect.left &&
+            newPosX <= opRect.right &&
+            newPosY >= opRect.top &&
+            newPosY <= opRect.bottom
+          ) {
+            strike = true;
+          }
           if (
             (newPosX < 0 || newPosX > window.innerWidth) &&
             (newPosY < 0 || newPosY > window.innerHeight)
@@ -147,12 +183,17 @@ class Arena extends Component {
             clearInterval(this.missileInterval);
             this.missileInterval = null;
           }
+          if (!missileVisible || strike) {
+            console.log('visible/strike', missileVisible, strike);
+            setTimeout(this.switchPlayer, 1000);
+          }
           return {
             speedX: newSpeedX,
             speedY: newSpeedY,
             posX: newPosX,
             posY: newPosY,
-            missileVisible
+            missileVisible,
+            strike
           };
         }),
       50
@@ -176,13 +217,23 @@ class Arena extends Component {
     const speedX = charge * cos;
     const speedY = charge * sin;
     this.setState(
-      { speedX, speedY, posX: playerX, posY: playerY, missileVisible: true, targetX: 0, targetY: 0 },
+      {
+        speedX,
+        speedY,
+        posX: playerX,
+        posY: playerY,
+        missileVisible: true,
+        targetX: 0,
+        targetY: 0
+      },
       this.startTrajectory
     );
 
     setTimeout(() => this.setState({ charge: 0 }), 250);
+  }
 
-    setTimeout(() => this.setState({ playerIdx: (playerIdx + 1) % 2 }), 1000);
+  switchPlayer() {
+    this.setState(({ playerIdx }) => ({ playerIdx: (playerIdx + 1) % 2 }));
   }
 
   initializeTransitions(idx) {
@@ -214,12 +265,16 @@ class Arena extends Component {
       targetY,
       playerX,
       playerY,
-      missileVisible
+      missileVisible,
+      showStrike
     } = this.state;
     const player = playerIdx ? player2 : player1;
     return (
       <div className="Arena">
-        <div className="Arena__title">Player {playerIdx + 1} <strong>{player.name}</strong> plays!</div>
+        <div className="Arena__title">
+          Player {playerIdx + 1}{" "}
+          <span className="Arena__playerName">{player.name}</span> plays!
+        </div>
         <Point x={playerX || -10} y={playerY || -10} />
         <Point x={targetX || -10} y={targetY || -10} />
         <Point
@@ -255,9 +310,11 @@ class Arena extends Component {
           </div>
         </div>
 
-        {/*<div className="Arena__stats">
+        {showStrike && <h2>Strike</h2>}
+        <div className="Arena__stats">
           speed {speedX},{speedY}
-        </div>*/}
+          post {posX},{posY}
+        </div>
       </div>
     );
   }

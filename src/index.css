@@ -85,6 +85,8 @@ code {
 
 .Arena__title {
   text-align: center;
+  font-size: 120%;
+  margin-top: 20px;
 }
 
 .Arena__inner {
@@ -95,12 +97,17 @@ code {
 
 .Arena__Player {
   position: absolute;
-  top: calc(50% - 100px);
+  top: calc(50% - 120px);
   transition: all 0.50s;
 }
 
+.Arena__playerName {
+  color: #c158dc;
+  font-weight: bold;
+}
+
 .Arena__ProgressBar {
-  height: 50px;
+  height: 40px;
   width: 40%;
   margin: 20px auto;
   border: 3px solid #444;
@@ -108,7 +115,7 @@ code {
 }
 
 .Arena__ProgressBar__inner {
-  height: 50px;
+  height: 40px;
   transition: all 0.1s;
 }
 

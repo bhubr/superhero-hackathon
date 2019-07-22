@@ -45,14 +45,19 @@ const ChoosePlayer = ({ mode, step, changeStep, choosePlayer, activeIndex, playe
             />
           </div>
         ))}
-      </div>
-      <Button className="ChoosePlayer__btn" onClick={() => {
-        const nextStep = (mode === 1 || step === steps.CHOOSE_PLAYER2) ? steps.PLAY : steps.CHOOSE_PLAYER2;
-        changeStep(nextStep);
-        choosePlayer(playerIndex, heroes[activeIndex]);
-      }}>
-        Choose!
-      </Button>
+      </div><Button
+  className="ChoosePlayer__btn"
+  onClick={() => {
+    const nextStep =
+      mode === 1 || step === steps.CHOOSE_PLAYER2
+        ? steps.PLAY
+        : steps.CHOOSE_PLAYER2;
+    changeStep(nextStep);
+    choosePlayer(playerIndex, heroes[activeIndex]);
+  }}
+>
+  Choose!
+</Button>;
     </div>
   );
 };
