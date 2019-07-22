@@ -1,26 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import heroes from "./data/heroes.json";
+import ChooseMode from "./components/ChooseMode";
+import ChoosePlayer from "./components/ChoosePlayer";
+import steps from './data/steps';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const EmptyComponent = () => <h1 style={{textAlign: 'center'}}>Empty Component :/</h1>;
+
+const components = {
+  [steps.CHOOSE_MODE]: ChooseMode,
+  [steps.CHOOSE_PLAYER1]: ChoosePlayer,
+  [steps.CHOOSE_PLAYER2]: ChoosePlayer
+};
+
+class App extends Component {
+  getComponent() {
+    const { step } = this.props;
+    return components[step];
+  }
+  render() {
+    const Component = this.getComponent() || EmptyComponent;
+    return <div className="App"><Component /></div>;
+  }
 }
 
-export default App;
+const mapStateToProps = state => ({
+  step: state.step
+});
+
+export default connect(mapStateToProps)(App);

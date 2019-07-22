@@ -5,9 +5,43 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: #222;
+  color: #ddd;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+.ChooseMode {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100vh;
+}
+
+.Card {
+  border: 1px solid #444;
+  border-radius: 5px;
+  padding: 30px;
+  background: #333;
+}
+
+.ChooseMode .Card {
+  text-align: center;
+}
+
+.text-disabled {
+  color: #555;
+}
+
+.ChoosePlayer {
+  display: flex;
+  align-items: center;
+}
+
+.ChoosePlayer__character {
+  display: block;
+  text-align: center;
 }
