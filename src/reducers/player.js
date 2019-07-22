@@ -22,8 +22,9 @@ const stepReducer = (state = initialState, action) => {
     case CHOOSE_PLAYER: {
       const { playerIdx, characterId } = action;
       const players = [...state.players];
-      players.splice(playerIdx, characterId);
+      players.splice(playerIdx, 1, characterId);
       return {
+        ...state,
         characterId,
         players
       };
