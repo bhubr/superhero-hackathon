@@ -83,6 +83,10 @@ code {
   text-align: center;
 }
 
+.Arena__title {
+  text-align: center;
+}
+
 .Arena__inner {
   margin-top: 80px;
   height: calc(80vh - 80px);
@@ -118,4 +122,10 @@ code {
 
 .Arena__missile {
   transition: all 0.2s;
+  box-shadow: 3px 3px 5px rgba(255, 0, 0, 0.5), -3px -3px 5px rgba(255, 0, 0, 0.5);
+  display: none;
+}
+
+.Arena__missile--visible {
+  display: block;
 }

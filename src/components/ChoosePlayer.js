@@ -38,7 +38,7 @@ const ChoosePlayer = ({ mode, step, changeStep, choosePlayer, activeIndex, playe
           <div key={id} className="ChoosePlayer__character">
             <img
               key={id}
-              src={images.lg}
+              src={images.md}
               alt={name}
               style={getStyle(index)}
               onClick={() => playerChoiceSetIndex(indices[index])}
