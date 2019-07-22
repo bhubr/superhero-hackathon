@@ -21,7 +21,8 @@ code {
   height: 100vh;
 }
 
-.Button {
+.Button,
+.Card {
   border: 2px solid #8e24aa;
   box-shadow: 2px 2px 5px #5c007a;
   border-radius: 5px;
@@ -29,20 +30,21 @@ code {
   background: #222;
   color: #c158dc;
 }
-.Button:hover {
+.Button:hover,
+.Card:hover {
   box-shadow: 10px 10px 20px #5c007a, -10px -10px 20px #5c007a;
 }
 
 .Button:focus {
   outline: none;
 }
-
+/*
 .Card {
   border: 1px solid #444;
   border-radius: 5px;
   padding: 30px;
   background: #333;
-}
+}*/
 
 .ChooseMode .Card {
   text-align: center;
@@ -59,6 +61,7 @@ code {
 .ChoosePlayer__inner {
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .ChoosePlayer__character {
@@ -80,10 +83,39 @@ code {
   text-align: center;
 }
 
-.Arena {
-  display: flex;
+.Arena__inner {
+  margin-top: 80px;
+  height: calc(80vh - 80px);
+  position: relative;
 }
 
 .Arena__Player {
-  transition: all 0.05s;
+  position: absolute;
+  top: calc(50% - 100px);
+  transition: all 0.50s;
+}
+
+.Arena__ProgressBar {
+  height: 50px;
+  width: 40%;
+  margin: 20px auto;
+  border: 3px solid #444;
+  border-radius: 2px;
+}
+
+.Arena__ProgressBar__inner {
+  height: 50px;
+  transition: all 0.1s;
+}
+
+.Arena .player1 {
+  left: 5%;
+}
+
+.Arena .player2 {
+  right: 5%;
+}
+
+.Arena__missile {
+  transition: all 0.2s;
 }
