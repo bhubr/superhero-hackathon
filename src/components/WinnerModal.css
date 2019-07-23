@@ -1,0 +1,28 @@
+.WinnerModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.WinnerModal__inner {
+  width: 400px;
+  background: #222;
+  border: 2px solid #333;
+  border-radius: 5px;
+  padding: 20px;
+}
+
+.WinnerModal__buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.WinnerModal h2 {
+  text-align: center;
+}

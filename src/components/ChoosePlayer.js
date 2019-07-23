@@ -21,14 +21,19 @@ const getStyle = index => {
   };
 };
 
-const ChoosePlayer = ({ mode, step, changeStep, choosePlayer, activeIndex, playerChoiceSetIndex }) => {
+const ChoosePlayer = ({
+  mode,
+  step,
+  changeStep,
+  choosePlayer,
+  activeIndex,
+  playerChoiceSetIndex
+}) => {
   const firstIndex = activeIndex >= 1 ? activeIndex - 1 : heroes.length - 1;
   const lastIndex = activeIndex < heroes.length - 1 ? activeIndex + 1 : 0;
   const choices = [heroes[firstIndex], heroes[activeIndex], heroes[lastIndex]];
   const indices = [firstIndex, activeIndex, lastIndex];
-  const playerIndex = mode === 1 || step === steps.CHOOSE_PLAYER1
-    ? 0
-    : 1;
+  const playerIndex = mode === 1 || step === steps.CHOOSE_PLAYER1 ? 0 : 1;
 
   return (
     <div className="ChoosePlayer">
@@ -45,19 +50,21 @@ const ChoosePlayer = ({ mode, step, changeStep, choosePlayer, activeIndex, playe
             />
           </div>
         ))}
-      </div><Button
-  className="ChoosePlayer__btn"
-  onClick={() => {
-    const nextStep =
-      mode === 1 || step === steps.CHOOSE_PLAYER2
-        ? steps.PLAY
-        : steps.CHOOSE_PLAYER2;
-    changeStep(nextStep);
-    choosePlayer(playerIndex, heroes[activeIndex]);
-  }}
->
-  Choose!
-</Button>;
+      </div>
+      <Button
+        className="ChoosePlayer__btn"
+        onClick={() => {
+          const nextStep =
+            mode === 1 || step === steps.CHOOSE_PLAYER2
+              ? steps.PLAY
+              : steps.CHOOSE_PLAYER2;
+          changeStep(nextStep);
+          choosePlayer(playerIndex, heroes[activeIndex]);
+        }}
+      >
+        Choose!
+      </Button>
+      ;
     </div>
   );
 };

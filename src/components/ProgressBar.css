@@ -1,0 +1,13 @@
+
+.ProgressBar {
+  height: 40px;
+  width: 40%;
+  margin: 20px auto;
+  border: 3px solid #444;
+  border-radius: 2px;
+}
+
+.ProgressBar__inner {
+  height: 40px;
+  transition: all 0.1s;
+}

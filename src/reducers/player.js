@@ -1,6 +1,7 @@
 import {
   CHOOSE_PLAYER,
-  PLAYER_CHOICE_SET_INDEX
+  PLAYER_CHOICE_SET_INDEX,
+  RETURN_TO_START
 } from '../actions';
 import heroes from '../data/heroes.json';
 
@@ -32,6 +33,11 @@ const stepReducer = (state = initialState, action) => {
         players
       };
     }
+    case RETURN_TO_START:
+      return {
+        ...initialState,
+        activeIndex: action.activeIndex
+      };
     default:
       return state;
   }

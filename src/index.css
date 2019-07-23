@@ -91,32 +91,19 @@ code {
 
 .Arena__inner {
   margin-top: 80px;
-  height: calc(80vh - 80px);
+  height: calc(80vh - 180px);
   position: relative;
 }
 
 .Arena__Player {
   position: absolute;
   top: calc(50% - 120px);
-  transition: all 0.50s;
+  transition: all 0.5s;
 }
 
 .Arena__playerName {
   color: #c158dc;
   font-weight: bold;
-}
-
-.Arena__ProgressBar {
-  height: 40px;
-  width: 40%;
-  margin: 20px auto;
-  border: 3px solid #444;
-  border-radius: 2px;
-}
-
-.Arena__ProgressBar__inner {
-  height: 40px;
-  transition: all 0.1s;
 }
 
 .Arena .player1 {
@@ -129,10 +116,21 @@ code {
 
 .Arena__missile {
   transition: all 0.2s;
-  box-shadow: 3px 3px 5px rgba(255, 0, 0, 0.5), -3px -3px 5px rgba(255, 0, 0, 0.5);
+  box-shadow: 3px 3px 5px rgba(255, 0, 0, 0.5),
+    -3px -3px 5px rgba(255, 0, 0, 0.5);
   display: none;
 }
 
 .Arena__missile--visible {
   display: block;
+}
+
+.Arena__PlayerStats__wrapper {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.PlayerStats {
+  width: 50%;
 }
