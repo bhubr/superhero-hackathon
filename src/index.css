@@ -65,8 +65,20 @@ code {
 }
 
 .ChoosePlayer__character {
+  position: relative;
   display: block;
   text-align: center;
+}
+
+.ChoosePlayer__character > span {
+  position: absolute;
+  display: inline-block;
+  padding: 10px 0;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.2);
 }
 
 .ChoosePlayer__title {

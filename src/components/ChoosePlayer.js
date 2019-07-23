@@ -10,7 +10,7 @@ import {
 import steps from "../data/steps";
 import heroes from "../data/heroes.json";
 
-const getStyle = index => {
+const getImgStyle = index => {
   const idxFromCenter = Math.abs(index - 1);
   const width = 100 - 20 * idxFromCenter;
   const opacity = 1 - 0.5 * idxFromCenter;
@@ -18,6 +18,16 @@ const getStyle = index => {
     width: `${width}%`,
     height: `${width}%`,
     opacity
+  };
+};
+
+const getSpanStyle = index => {
+  const idxFromCenter = Math.abs(index - 1);
+  const width = 100 - 20 * idxFromCenter;
+  const left = 10 * idxFromCenter;
+  return {
+    width: `${width}%`,
+    left: `${left}%`
   };
 };
 
@@ -45,9 +55,10 @@ const ChoosePlayer = ({
               key={id}
               src={images.md}
               alt={name}
-              style={getStyle(index)}
+              style={getImgStyle(index)}
               onClick={() => playerChoiceSetIndex(indices[index])}
             />
+            <span style={getSpanStyle(index)}>{name}</span>
           </div>
         ))}
       </div>
