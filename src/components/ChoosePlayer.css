@@ -1,0 +1,40 @@
+.ChoosePlayer {
+  margin-top: 30px;
+}
+
+.ChoosePlayer__inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ChoosePlayer__character {
+  position: relative;
+  display: block;
+  text-align: center;
+}
+
+.ChoosePlayer__character > span {
+  position: absolute;
+  display: inline-block;
+  padding: 10px 0;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.ChoosePlayer__title {
+  text-align: center;
+  color: #c158dc;
+  font-size: 200%;
+}
+
+.ChoosePlayer__btn {
+  display: block;
+  width: 25%;
+  margin: 40px auto 0 auto;
+  font-size: 180%;
+  text-align: center;
+}

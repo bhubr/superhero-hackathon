@@ -4,18 +4,22 @@ import { connect } from "react-redux";
 import ProgressBar from "./ProgressBar";
 import Point from "./Point";
 import WinnerModal from "./WinnerModal";
+import "./Arena.css";
 
 const TIME_INCR = 200;
 const SPEED_DECR_X = 0.3;
 const SPEED_DECR_Y = 1.5;
-const STRIKE_POINTS = 50;
+const STRIKE_POINTS = 10;
 
 const PlayerStats = ({
-  player: { powerstats: { durability: origLife } },
+  player: {
+    powerstats: { durability: origLife }
+  },
   currentLife
 }) => (
   <div className="PlayerStats">
-    <ProgressBar progress={100 * currentLife / origLife} inverted />
+    <ProgressBar progress={(100 * currentLife) / origLife} inverted />
+    <p>{currentLife}</p>
   </div>
 );
 
@@ -35,6 +39,7 @@ class Arena extends Component {
     this.switchPlayer = this.switchPlayer.bind(this);
     this.showWinner = this.showWinner.bind(this);
     this.replay = this.replay.bind(this);
+    this.checkTurnOver = this.checkTurnOver.bind(this);
   }
 
   componentDidMount() {
@@ -54,7 +59,8 @@ class Arena extends Component {
     if (strike && strike !== prevState.strike) {
       this.showStrike();
       setTimeout(this.hideStrike, 1000);
-    }if (otherPlayerDies && otherPlayerDies !== prevState.otherPlayerDies) {
+    }
+    if (otherPlayerDies !== false && otherPlayerDies !== prevState.otherPlayerDies) {
       this.showWinner();
     }
   }
@@ -81,7 +87,8 @@ class Arena extends Component {
       ],
       strike: false,
       otherPlayerDies: false,
-      showWinner: false
+      showWinner: false,
+      turnOver: false
     };
   }
 
@@ -104,7 +111,7 @@ class Arena extends Component {
 
   onKeyPressStart(e) {
     const { showWinner } = this.state;
-    if (this.chargeInterval || showWinner) return;
+    if (this.chargeInterval || showWinner) return;
     const { clientX: targetX, clientY: targetY } = e;
     const { playerIdx } = this.state;
     const playerRef = playerIdx === 0 ? this.player1Ref : this.player2Ref;
@@ -124,7 +131,7 @@ class Arena extends Component {
 
   onKeyPressStop(e) {
     const { showWinner } = this.state;
-    if (!this.chargeInterval || showWinner) return;
+    if (!this.chargeInterval || showWinner) return;
     clearInterval(this.chargeInterval);
     this.chargeInterval = null;
     this.fire();
@@ -137,53 +144,82 @@ class Arena extends Component {
   startTrajectory() {
     this.missileInterval = setInterval(
       () =>
-        this.setState(({ speedX, speedY, posX, posY, playerIdx, playersLife }) => {
-          const otherPlayerRef =
-            playerIdx === 0 ? this.player2Ref : this.player1Ref;
-          const newPlayersLife = [...playersLife];
-          const opRect = otherPlayerRef.current.getBoundingClientRect();
-          const newSpeedY = speedY - SPEED_DECR_Y;
-          const newSpeedX = speedX - SPEED_DECR_X;
-          const newPosX = posX + speedX;
-          const newPosY = posY - speedY;
-          let missileVisible = true;
-          let strike = false;
-          let otherPlayerDies = false;
-          if (
-            newPosX >= opRect.left &&
-            newPosX <= opRect.right &&
-            newPosY >= opRect.top &&
-            newPosY <= opRect.bottom
-          ) {
-            const otherPlayerIdx = (playerIdx + 1) % 2;
-            newPlayersLife[otherPlayerIdx] -= STRIKE_POINTS;
-            otherPlayerDies = newPlayersLife[otherPlayerIdx] <= 0 ? otherPlayerIdx : false;
-            strike = true;
-          }
-          if (
-            (newPosX < 0 || newPosX > window.innerWidth) &&
-            (newPosY < 0 || newPosY > window.innerHeight)
-          ) {
-            missileVisible = false;
-            clearInterval(this.missileInterval);
-            this.missileInterval = null;
-          }
-          if (!missileVisible || strike) {
-            this.switchPlayer();
-          }
-          return {
-            speedX: newSpeedX,
-            speedY: newSpeedY,
-            posX: newPosX,
-            posY: newPosY,
-            missileVisible,
-            strike,
-            playersLife: newPlayersLife,
-            otherPlayerDies
-          };
-        }),
+        this.setState(
+          ({
+            speedX,
+            speedY,
+            posX,
+            posY,
+            playerIdx,
+            playersLife,
+            turnOver
+          }) => {
+            const otherPlayerRef =
+              playerIdx === 0 ? this.player2Ref : this.player1Ref;
+            const newPlayersLife = [...playersLife];
+            const opRect = otherPlayerRef.current.getBoundingClientRect();
+            const newSpeedY = speedY - SPEED_DECR_Y;
+            const newSpeedX = speedX - SPEED_DECR_X;
+            const newPosX = posX + speedX;
+            const newPosY = posY - speedY;
+            let missileVisible = true;
+            let strike = false;
+            let otherPlayerDies = false;
+            let newTurnOver = false;
+            let damage;
+            if (
+              newPosX >= opRect.left &&
+              newPosX <= opRect.right &&
+              newPosY >= opRect.top &&
+              newPosY <= opRect.bottom
+            ) {
+              const otherPlayerIdx = (playerIdx + 1) % 2;
+              const { player1, player2 } = this.props;
+              const player = playerIdx === 0 ? player1 : player2;
+              damage =
+                STRIKE_POINTS +
+                player.powerstats.combat / 4 +
+                Math.floor(3 * Math.random());
+              newPlayersLife[otherPlayerIdx] -= damage;
+              otherPlayerDies =
+                newPlayersLife[otherPlayerIdx] <= 0 ? otherPlayerIdx : false;
+              console.log(newPlayersLife[otherPlayerIdx], otherPlayerDies);
+              strike = true;
+              newTurnOver = true;
+            }
+            if (
+              (newPosX < 0 || newPosX > window.innerWidth) &&
+              (newPosY < 0 || newPosY > window.innerHeight)
+            ) {
+              missileVisible = false;
+              newTurnOver = true;
+              this.missileInterval = null;
+            }
+            return {
+              speedX: newSpeedX,
+              speedY: newSpeedY,
+              posX: newPosX,
+              posY: newPosY,
+              missileVisible,
+              strike,
+              playersLife: newPlayersLife,
+              otherPlayerDies,
+              turnOver: newTurnOver,
+              damage
+            };
+          },
+          this.checkTurnOver
+        ),
       50
     );
+  }
+
+  checkTurnOver() {
+    const { turnOver } = this.state;
+    if (turnOver) {
+      clearInterval(this.missileInterval);
+      this.switchPlayer();
+    }
   }
 
   fire() {
@@ -219,15 +255,21 @@ class Arena extends Component {
   }
 
   switchPlayer() {
-    this.setState(({ playerIdx }) => ({ playerIdx: (playerIdx + 1) % 2 }));
+    console.log("switch", this.state.playerIdx);
+    this.setState(({ playerIdx }) => ({
+      playerIdx: (playerIdx + 1) % 2,
+      turnOver: false,
+      missileVisible: false
+    }));
   }
 
   initializeTransitions(idx) {
     let time = Math.floor(TIME_INCR * Math.random());
     let deg = Math.sin(time);
     setInterval(() => {
-      time += 0.125 * Math.PI;
-      deg = (Math.sin(time) * 5).toFixed(1);
+      time = time + ((0.05 * Math.PI) % (2 * Math.PI));
+      deg = (Math.sin(time) * 10).toFixed(1);
+      // if (idx === 0) console.log(deg)
       this.setState(({ degrees: prevDegrees }) => {
         const degrees = [...prevDegrees];
         degrees.splice(idx, 1, deg);
@@ -255,16 +297,18 @@ class Arena extends Component {
       showStrike,
       playersLife,
       otherPlayerDies,
-      showWinner
+      showWinner,
+      damage
     } = this.state;
     const player = playerIdx ? player2 : player1;
     return (
       <div className="Arena">
-        {
-          showWinner && (
-            <WinnerModal winner={otherPlayerDies === 1 ? player1 : player2} replay={this.replay} />
-          )
-        }
+        {showWinner && (
+          <WinnerModal
+            winner={otherPlayerDies === 1 ? player1 : player2}
+            replay={this.replay}
+          />
+        )}
         <div className="Arena__title">
           Player {playerIdx + 1}{" "}
           <span className="Arena__playerName">{player.name}</span> plays!
@@ -300,7 +344,14 @@ class Arena extends Component {
           </div>
         </div>
 
-        {showStrike && <h2 style={{position:'absolute'}}>Strike</h2>}
+        {
+          showStrike && (
+            <div className="Arena__strike">
+              <h2>Strike</h2>
+              <p>{damage} damage points!!!</p>
+            </div>
+          )
+        }
 
         <div className="Arena__PlayerStats__wrapper">
           <PlayerStats player={player1} currentLife={playersLife[0]} />

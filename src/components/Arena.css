@@ -1,0 +1,68 @@
+.Arena__title {
+  text-align: center;
+  font-size: 120%;
+  margin-top: 20px;
+}
+
+.Arena__inner {
+  margin-top: 80px;
+  height: calc(80vh - 180px);
+  position: relative;
+}
+
+.Arena__Player {
+  position: absolute;
+  top: calc(50% - 120px);
+  transition: all 0.5s;
+}
+
+.Arena__playerName {
+  color: #c158dc;
+  font-weight: bold;
+}
+
+.Arena .player1 {
+  left: 5%;
+}
+
+.Arena .player2 {
+  right: 5%;
+}
+
+.Arena__missile {
+  transition: all 0.2s;
+  box-shadow: 3px 3px 5px rgba(255, 0, 0, 0.5),
+    -3px -3px 5px rgba(255, 0, 0, 0.5);
+  display: none;
+}
+
+.Arena__missile--visible {
+  display: block;
+}
+
+.Arena__PlayerStats__wrapper {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.Arena__strike {
+  position: absolute;
+  text-align: center;
+  font-size: 120%;
+  top: 50%;
+  width: 30%;
+  left: 35%;
+  color: #D32F2F;
+  text-shadow: 3px 3px 5px rgba(211, 47, 47, 0.5),
+    -3px -3px 5px rgba(211, 47, 47, 0.5);
+  animation-name: strikeAnim;
+  animation-duration: 1.5s;
+}
+
+@keyframes strikeAnim {
+  0%   {font-size: 120%;}
+  30%  {font-size: 150%}
+  50%  {font-size: 240%}
+  100% {font-size: 120%;}
+}

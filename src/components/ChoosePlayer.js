@@ -9,6 +9,7 @@ import {
 } from "../actions";
 import steps from "../data/steps";
 import heroes from "../data/heroes.json";
+import "./ChoosePlayer.css";
 
 const getImgStyle = index => {
   const idxFromCenter = Math.abs(index - 1);
