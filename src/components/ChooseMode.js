@@ -14,6 +14,7 @@ const ChooseMode = ({ chooseMode, changeStep, adModalShown, showAdModal }) => (
     {
       adModalShown && <AdModal />
     }
+    <h1 className="ChooseMode__title">Hero Bomb Fight</h1>
     <div className="row">
       <div className="col-xs-offset-2 col-md-4">
         <Card>

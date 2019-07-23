@@ -38,3 +38,10 @@
   font-size: 180%;
   text-align: center;
 }
+
+.ChooseMode__title {
+  color: #D32F2F;
+  text-align: center;
+  margin-bottom: 60px;
+  font-size: 250%;
+}
