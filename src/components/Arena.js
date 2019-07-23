@@ -40,6 +40,7 @@ class Arena extends Component {
     this.showWinner = this.showWinner.bind(this);
     this.replay = this.replay.bind(this);
     this.checkTurnOver = this.checkTurnOver.bind(this);
+    this.clearTurnAndSwitch = this.clearTurnAndSwitch.bind(this);
   }
 
   componentDidMount() {
@@ -154,6 +155,7 @@ class Arena extends Component {
             playersLife,
             turnOver
           }) => {
+            console.log('traj')
             const otherPlayerRef =
               playerIdx === 0 ? this.player2Ref : this.player1Ref;
             const newPlayersLife = [...playersLife];
@@ -181,6 +183,7 @@ class Arena extends Component {
                 player.powerstats.combat / 4 +
                 Math.floor(3 * Math.random());
               newPlayersLife[otherPlayerIdx] -= damage;
+              if (newPlayersLife[otherPlayerIdx] < 0) newPlayersLife[otherPlayerIdx] = 0;
               otherPlayerDies =
                 newPlayersLife[otherPlayerIdx] <= 0 ? otherPlayerIdx : false;
               console.log(newPlayersLife[otherPlayerIdx], otherPlayerDies);
@@ -193,7 +196,6 @@ class Arena extends Component {
             ) {
               missileVisible = false;
               newTurnOver = true;
-              this.missileInterval = null;
             }
             return {
               speedX: newSpeedX,
@@ -217,9 +219,18 @@ class Arena extends Component {
   checkTurnOver() {
     const { turnOver } = this.state;
     if (turnOver) {
-      clearInterval(this.missileInterval);
-      this.switchPlayer();
+      setTimeout(this.clearTurnAndSwitch, 40);
     }
+  }
+
+  clearTurnAndSwitch() {
+    clearInterval(this.missileInterval);
+    this.missileInterval = null;
+    this.setState({
+      turnOver: false,
+      missileVisible: false
+    });
+    this.switchPlayer();
   }
 
   fire() {
@@ -255,21 +266,18 @@ class Arena extends Component {
   }
 
   switchPlayer() {
-    console.log("switch", this.state.playerIdx);
     this.setState(({ playerIdx }) => ({
-      playerIdx: (playerIdx + 1) % 2,
-      turnOver: false,
-      missileVisible: false
+      playerIdx: (playerIdx + 1) % 2
     }));
   }
 
   initializeTransitions(idx) {
-    let time = Math.floor(TIME_INCR * Math.random());
+    let time = Math.floor(TIME_INCR / 2 * Math.random());
     let deg = Math.sin(time);
     setInterval(() => {
-      time = time + ((0.05 * Math.PI) % (2 * Math.PI));
+      const rand = (1 + Math.random()) * 0.1;
+      time = time + ((rand * Math.PI) % (2 * Math.PI));
       deg = (Math.sin(time) * 10).toFixed(1);
-      // if (idx === 0) console.log(deg)
       this.setState(({ degrees: prevDegrees }) => {
         const degrees = [...prevDegrees];
         degrees.splice(idx, 1, deg);

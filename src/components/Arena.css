@@ -7,13 +7,15 @@
 .Arena__inner {
   margin-top: 80px;
   height: calc(80vh - 180px);
+  max-height: calc(80vh - 180px);
+  overflow: hidden;
   position: relative;
 }
 
 .Arena__Player {
   position: absolute;
   top: calc(50% - 120px);
-  transition: all 0.5s;
+  transition: all 0.1s;
 }
 
 .Arena__playerName {
