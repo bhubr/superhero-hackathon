@@ -7,12 +7,12 @@ import './WinnerModal.css';
 const WinnerModal = ({ winner, replay, returnToStart }) => {
   return (
     <div
-      className="WinnerModal"
+      className="Modal"
     >
       <div
-        className="WinnerModal__inner"
+        className="Modal__inner"
       >
-        <h2>{winner.name} wins!!</h2>
+        <h2 className="Modal__title">{winner.name} wins!!</h2>
         <div className="WinnerModal__buttons">
           <Button onClick={replay}>
             Play again with same opponents

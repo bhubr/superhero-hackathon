@@ -3,20 +3,26 @@ import Card from "./Card";
 import { connect } from "react-redux";
 import {
   chooseMode as chooseModeAction,
-  changeStep as changeStepAction
+  changeStep as changeStepAction,
+  showAdModal as showAdModalAction
 } from "../actions";
+import AdModal from './AdModal';
 import steps from "../data/steps";
 
-const ChooseMode = ({ chooseMode, changeStep }) => (
+const ChooseMode = ({ chooseMode, changeStep, adModalShown, showAdModal }) => (
   <div className="ChooseMode">
+    {
+      adModalShown && <AdModal />
+    }
     <div className="row">
       <div className="col-xs-offset-2 col-md-4">
         <Card>
           <h2
             className="text-disabled"
             onClick={() => {
-              chooseMode(1);
-              changeStep(steps.CHOOSE_PLAYER1);
+              // chooseMode(1);
+              // changeStep(steps.CHOOSE_PLAYER1);
+              showAdModal();
             }}
           >
             1 player vs computer
@@ -39,12 +45,17 @@ const ChooseMode = ({ chooseMode, changeStep }) => (
   </div>
 );
 
+const mapStateToProps = state => ({
+  adModalShown: state.adModal
+});
+
 const mapDispatchToProps = {
+  showAdModal: showAdModalAction,
   chooseMode: chooseModeAction,
   changeStep: changeStepAction
 };
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps
 )(ChooseMode);

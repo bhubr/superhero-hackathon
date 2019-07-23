@@ -107,6 +107,8 @@ class Arena extends Component {
   }
 
   showWinner() {
+    const audio = new Audio('dying.mp3');
+    audio.play();
     this.setState({ showWinner: true });
   }
 
@@ -189,6 +191,8 @@ class Arena extends Component {
               console.log(newPlayersLife[otherPlayerIdx], otherPlayerDies);
               strike = true;
               newTurnOver = true;
+              const audio = new Audio('attack.mp3');
+              audio.play();
             }
             if (
               (newPosX < 0 || newPosX > window.innerWidth) &&
